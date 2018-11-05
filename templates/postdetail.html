@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h3>Your Post Detail</h3>
+<form >
+    <div class="form-group">
+        <label for="post" >Title</label>
+        <input class="form-control" type="text" readonly="True" name='title' value="{{post_title}}" />
+        <label for="body">Body</label>
+        <textarea class="form-control" name='body' readonly="True">{{body}}</textarea>
+    </div>
+
+    <!-- <input type="submit" value='Add Post' class="btn btn-default" /> -->
+</form>
+{% endblock %}

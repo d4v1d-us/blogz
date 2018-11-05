@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h3>Add a Post</h3>
+<!-- <h3>Add a Post</h3>
 <form method='post'>
     <div class="form-group">
         <label for="post">Title</label>
@@ -10,9 +10,9 @@
         <textarea class="form-control" name='body'></textarea>
     </div>
     <input type="submit" value='Add Post' class="btn btn-default" />
-</form>
+</form> -->
 
-<h3>Posts</h3>
+<h3>Your Blog Posts</h3>
 
 {% if posts|length == 0 %}
 <p>No posts yet</p>
@@ -30,7 +30,8 @@
         </form>
         -->
         <b>
-            {{post.title}}
+                
+        <a href='./postdetail.html' class="navbar-brand">{{post.title}}</a>
         </b>
         <br>
         {{post.body}}
