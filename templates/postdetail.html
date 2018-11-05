@@ -5,11 +5,9 @@
 <form >
     <div class="form-group">
         <label for="post" >Title</label>
-        <input class="form-control" type="text" readonly="True" name='title' value="{{post_title}}" />
+        <input class="form-control" type="text" readonly="True" name='title' value="{{post.title}}" />
         <label for="body">Body</label>
-        <textarea class="form-control" name='body' readonly="True">{{body}}</textarea>
+        <textarea class="form-control" name='body' readonly="True">{{post.body}}</textarea>
     </div>
-
-    <!-- <input type="submit" value='Add Post' class="btn btn-default" /> -->
 </form>
 {% endblock %}

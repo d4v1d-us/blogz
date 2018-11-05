@@ -8,7 +8,6 @@ app.config['SQLALCHEMY_ECHO'] = True
 db = SQLAlchemy(app)
 app.secret_key = 'y337kGcys&zP3B'
 
-
 class Blog(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
@@ -19,7 +18,6 @@ class Blog(db.Model):
         self.title = title
         self.body = body
         #self.id = id
-
 
 @app.route('/newpost', methods=['POST', 'GET'])
 def newpost():
@@ -43,9 +41,12 @@ def newpost():
         db.session.add(new_post)
         db.session.commit()
 
-        posts = Blog.query.filter_by().all()
+        postID = new_post.id
+        post = Blog.query.filter_by(id=postID).first()
+        return render_template('postdetail.html', title="Build a Blog", post=post)
 
-        return render_template('blog.html', title="Build a Blog", posts=posts)
+        # posts = Blog.query.filter_by().all()
+        # return render_template('blog.html', title="Build a Blog", posts=posts)
 
     if request.method == 'GET':
 
@@ -57,14 +58,17 @@ def newpost():
 def blog():
 
     if request.method == 'POST' or request.method == 'GET':
-        posts = Blog.query.filter_by().all()
-        return render_template('blog.html', title="Build a Blog", posts=posts)
+        postID = request.args.get('id', default=None)
+        if postID != None:
+            post = Blog.query.filter_by(id=postID).first()
+            return render_template('postdetail.html', title="Build a Blog", post=post)
+        else:
+            posts = Blog.query.filter_by().all()
+            return render_template('blog.html', title="Build a Blog", posts=posts)
 
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
-
-    #owner = User.query.filter_by(email=session['email']).first()
 
     if request.method == 'POST':
         title = request.form['title']

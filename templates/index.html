@@ -1,16 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-<!-- <h3>Add a Post</h3>
-<form method='post'>
-    <div class="form-group">
-        <label for="post">Title</label>
-        <input class="form-control" type="text" name='title' />
-        <label for="body">Body</label>
-        <textarea class="form-control" name='body'></textarea>
-    </div>
-    <input type="submit" value='Add Post' class="btn btn-default" />
-</form> -->
 
 <h3>Your Blog Posts</h3>
 
@@ -18,26 +8,15 @@
 <p>No posts yet</p>
 {% else %}
 
-<ul class="list-group">
+<table border="1" width="600" style="border-spacing: 2px;">
     {% for post in posts %}
-    <li class="list-group-item">
-        <!--
-        <form method="POST" action="/delete-post" style="display:inline-block;margin-right:10px;">
-            <input type="hidden" name="post-id" value="{{post.id}}" />
-            <button type="submit" class="btn btn-default btn-sm">
-                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-            </button>
-        </form>
-        -->
-        <b>
-                
-        <a href='./postdetail.html' class="navbar-brand">{{post.title}}</a>
-        </b>
-        <br>
-        {{post.body}}
-    </li>
+    <tr>
+        <td>
+            <b><a href='./blog?id={{post.id}}' class="">{{post.title}}</a></b><br>{{post.body}}<br><br>
+        </td>
+    </tr>
     {% endfor %}
-</ul>
+</table>
 
 {% endif %}
 
