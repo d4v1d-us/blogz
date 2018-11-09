@@ -22,7 +22,7 @@
 </head>
 
 <body>
-
+    {% if 'email' in session %}
     <nav class="navbar navbar-default">
         <a href='/' class="navbar-brand">Build a Blog</a>
         <ul class="nav navbar-nav navbar-right">
@@ -36,10 +36,15 @@
                     <button class="btn btn-default navbar-btn">Check out Your Blog</button>
                 </form>
             </li>
+            <li>
+                <form method="post" action="/logout">
+                    <button class="btn btn-default navbar-btn">Logout</button>
+                </form>
+            </li>
             &nbsp;&nbsp;&nbsp;&nbsp;
         </ul>
     </nav>
-
+    {% endif %}
 
     <div class="container">
 
