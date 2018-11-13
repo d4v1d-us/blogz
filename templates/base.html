@@ -25,7 +25,7 @@
     
     <nav class="navbar navbar-default">
         <a href='/' class="navbar-brand">Blogz</a>
-        {% if 'email' in session %}
+        {% if 'username' in session %}
         <ul class="nav navbar-nav navbar-right">
             <li>
                 <form method="get" action="/newpost">

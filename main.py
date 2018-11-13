@@ -8,6 +8,7 @@ app.config['SQLALCHEMY_ECHO'] = True
 db = SQLAlchemy(app)
 app.secret_key = 'y337kGcys&zP3B'
 
+
 class Blog(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
@@ -21,25 +22,27 @@ class Blog(db.Model):
         self.owner = owner
         #self.id = id
 
+
 class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(10))
     password = db.Column(db.String(10))
-    username = db.Column(db.String(120), unique=True)
+    username = db.Column(db.String(10), unique=True)
     blogz = db.relationship('Blog', backref='owner')
 
-    def __init__(self, email, password):
-        self.email = email
+    def __init__(self, username, password):
+        self.username = username
         self.password = password
         #self.pw_hash = make_pw_hash(password)
         #self.id = id
 
+
 @app.before_request
 def require_login():
     allowed_routes = ['login', 'register', 'static']
-    if request.endpoint not in allowed_routes and 'email' not in session:
-        return redirect('/login' )
+    if request.endpoint not in allowed_routes and 'username' not in session:
+        return redirect('/login')
+
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -47,19 +50,23 @@ def login():
         username = request.form['username']
         password = request.form['password']
 
-        if username == "" or password == "":
-            flash('Please enter your Login', 'danger')
+        if username == "":
+            flash('Please enter your Username', 'danger')
             return render_template('login.html', title="Blogz")
-        else:
-            user = User.query.filter_by(username=username).first()
-            if not user:
-                flash('Username does not exist', 'danger')
-                return render_template('login.html', title="Blogz")
+
+        if password == "":
+            flash('Please enter your Password', 'danger')
+            return render_template('login.html', title="Blogz")
+
+        user = User.query.filter_by(username=username).first()
+        if not user:
+            flash('Username does not exist', 'danger')
+            return render_template('login.html', title="Blogz")
 
         user = User.query.filter_by(username=username, password=password).first()
 
-        if user: #and check_pw_hash(password, user.pw_hash):
-            session['email'] = user.email
+        if user:  # and check_pw_hash(password, user.pw_hash):
+            #session['email'] = user.email
             session['username'] = username
             flash("Logged in", 'info')
             return redirect('/newpost')
@@ -68,6 +75,7 @@ def login():
             return render_template('login.html', title="Blogz", username=username)
     return render_template('login.html', title="Blogz")
 
+
 @app.route('/register', methods=['POST', 'GET'])
 def register():
     if request.method == 'POST':
@@ -75,20 +83,39 @@ def register():
         if username == None:
             username = ''
 
-        #check username
+        # check username
         if username == '':
             flash("Hey Enter a Username!", 'danger')
             return render_template('register.html')
 
         if len(username) > 10 or len(username) < 3:
             flash("Hey Username should be 3 to 10 in length!", 'danger')
-            return render_template('register.html')
+            return render_template('register.html', title="Blogz", username=username)
 
-
+        # check password
         password = request.form['password']
-        verify = request.form['verify']
+        if password == None:
+            password = ''
 
-        # TODO - validate user's data
+        if password == '':
+            flash("Hey Enter a Password!", 'danger')
+            return render_template('register.html', title="Blogz", username=username)
+        
+        if len(password) > 10 or len(password) < 3:
+            flash("Hey Password should be 3 to 10 in length!", 'danger')
+            return render_template('register.html', title="Blogz", username=username)
+
+        verify = request.form['verify']
+        if verify == None:
+            verify = ''
+
+        if verify == '':
+            flash("Hey Verify your Password!", 'danger')
+            return render_template('register.html', title="Blogz", username=username)
+        
+        if verify != password:
+            flash("Hey Password and Verify Password should Match!", 'danger')
+            return render_template('register.html', title="Blogz", username=username)
 
         existing_user = User.query.filter_by(username=username).first()
         if not existing_user:
@@ -96,17 +123,18 @@ def register():
             db.session.add(new_user)
             db.session.commit()
             session['username'] = username
-            return redirect('/')
+            return redirect('/newpost')
         else:
             flash("We already have the username <strong>{0}!!</strong>".format(username), 'danger')
-
     return render_template('register.html')
+
 
 @app.route('/logout', methods=['POST'])
 def logout():
-    del session['email']
+    #del session['email']
     del session['username']
-    return redirect('/')
+    return redirect('/blog')
+
 
 @app.route('/newpost', methods=['POST', 'GET'])
 def newpost():
