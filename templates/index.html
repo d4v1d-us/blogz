@@ -2,17 +2,17 @@
 
 {% block content %}
 
-<h3>Your Blog Posts</h3>
+<h3>All Blog Post Authors</h3>
 
-{% if posts|length == 0 %}
-<p>No posts yet</p>
+{% if users|length == 0 %}
+<p>No Users yet</p>
 {% else %}
 
 <table border="1" width="600" style="border-spacing: 2px;">
-    {% for post in posts %}
+    {% for user in users %}
     <tr>
         <td>
-            <b><a href='./blog?id={{post.id}}' class="">{{post.title}}</a></b><br>{{post.body}}<br><br>
+            <b><a href='./blog?user={{user.id}}' class="">{{user.username}}</a></b>
         </td>
     </tr>
     {% endfor %}
@@ -21,3 +21,4 @@
 {% endif %}
 
 {% endblock %}
+

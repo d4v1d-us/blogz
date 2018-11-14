@@ -39,7 +39,9 @@ class User(db.Model):
 
 @app.before_request
 def require_login():
-    allowed_routes = ['login', 'register', 'static']
+
+    #login  list_blogs index signup
+    allowed_routes = ['login', 'register', 'blog', 'index', 'static']
     if request.endpoint not in allowed_routes and 'username' not in session:
         return redirect('/login')
 
@@ -47,8 +49,8 @@ def require_login():
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+        username = request.form.get('username')
+        password = request.form.get('password')
 
         if username == "":
             flash('Please enter your Username', 'danger')
@@ -75,6 +77,11 @@ def login():
             return render_template('login.html', title="Blogz", username=username)
     return render_template('login.html', title="Blogz")
 
+@app.route('/logout', methods=['POST'])
+def logout():
+    #del session['email']
+    del session['username']
+    return redirect('/blog')
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():
@@ -128,14 +135,6 @@ def register():
             flash("We already have the username <strong>{0}!!</strong>".format(username), 'danger')
     return render_template('register.html')
 
-
-@app.route('/logout', methods=['POST'])
-def logout():
-    #del session['email']
-    del session['username']
-    return redirect('/blog')
-
-
 @app.route('/newpost', methods=['POST', 'GET'])
 def newpost():
 
@@ -152,6 +151,8 @@ def newpost():
 
             flash("You should enter the Body for you Post")
             return render_template('newpost.html', title="Blogz", post_title=title, body=body)
+
+        owner = User.query.filter_by(username=session['username']).first()
 
         new_post = Blog(title, body, owner)
 
@@ -187,23 +188,23 @@ def blog():
 @app.route('/', methods=['POST', 'GET'])
 def index():
 
-    if request.method == 'POST':
-        title = request.form['title']
-        body = request.form['body']
+    # if request.method == 'POST':
+    #     title = request.form['title']
+    #     body = request.form['body']
 
-        new_post = Blog(title, body, owner)
+    #     new_post = Blog(title, body, owner)
 
-        db.session.add(new_post)
-        db.session.commit()
+    #     db.session.add(new_post)
+    #     db.session.commit()
 
-        posts = Blog.query.filter_by().all()
+    #     posts = Blog.query.filter_by().all()
 
-        return render_template('index.html', title="Blogz", posts=posts)
+    #     return render_template('index.html', title="Blogz", posts=posts)
 
     if request.method == 'GET':
 
-        posts = Blog.query.filter_by().all()
-        return render_template('index.html', title="Blogz", posts=posts)
+        users = User.query.filter_by().all()
+        return render_template('index.html', title="Blogz", users=users)
 
 
 if __name__ == '__main__':
