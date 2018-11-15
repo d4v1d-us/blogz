@@ -73,7 +73,7 @@ def login():
             flash("Logged in", 'info')
             return redirect('/newpost')
         else:
-            flash('User Password incorrect', 'danger')
+            flash('User Password incorrect', 'warning')
             return render_template('login.html', title="Blogz", username=username)
     return render_template('login.html', title="Blogz")
 
@@ -92,11 +92,11 @@ def register():
 
         # check username
         if username == '':
-            flash("Hey Enter a Username!", 'danger')
+            flash("Hey Enter a Username!", 'warning')
             return render_template('register.html')
 
         if len(username) > 10 or len(username) < 3:
-            flash("Hey Username should be 3 to 10 in length!", 'danger')
+            flash("Hey Username should be 3 to 10 in length!", 'warning')
             return render_template('register.html', title="Blogz", username=username)
 
         # check password
@@ -105,11 +105,11 @@ def register():
             password = ''
 
         if password == '':
-            flash("Hey Enter a Password!", 'danger')
+            flash("Hey Enter a Password!", 'warning')
             return render_template('register.html', title="Blogz", username=username)
         
         if len(password) > 10 or len(password) < 3:
-            flash("Hey Password should be 3 to 10 in length!", 'danger')
+            flash("Hey Password should be 3 to 10 in length!", 'warning')
             return render_template('register.html', title="Blogz", username=username)
 
         verify = request.form['verify']
@@ -117,11 +117,11 @@ def register():
             verify = ''
 
         if verify == '':
-            flash("Hey Verify your Password!", 'danger')
+            flash("Hey Verify your Password!", 'warning')
             return render_template('register.html', title="Blogz", username=username)
         
         if verify != password:
-            flash("Hey Password and Verify Password should Match!", 'danger')
+            flash("Hey Password and Verify Password should Match!", 'warning')
             return render_template('register.html', title="Blogz", username=username)
 
         existing_user = User.query.filter_by(username=username).first()
@@ -132,7 +132,7 @@ def register():
             session['username'] = username
             return redirect('/newpost')
         else:
-            flash("We already have the username <strong>{0}!!</strong>".format(username), 'danger')
+            flash("We already have the username <strong>{0}!!</strong>".format(username), 'warning')
     return render_template('register.html')
 
 @app.route('/newpost', methods=['POST', 'GET'])
@@ -144,12 +144,12 @@ def newpost():
 
         if title == '':
 
-            flash("You should enter a Title for you Post")
+            flash("You should enter a Title for you Post", 'warning')
             return render_template('newpost.html', title="Blogz", post_title=title, body=body)
 
         if body == '':
 
-            flash("You should enter the Body for you Post")
+            flash("You should enter the Body for you Post", 'warning')
             return render_template('newpost.html', title="Blogz", post_title=title, body=body)
 
         owner = User.query.filter_by(username=session['username']).first()
