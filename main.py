@@ -175,14 +175,30 @@ def newpost():
 @app.route('/blog', methods=['POST', 'GET'])
 def blog():
 
-    if request.method == 'POST' or request.method == 'GET':
+    # if request.method == 'POST': #or request.method == 'GET':
+    #     postID = request.args.get('id', default=None)
+    #     if postID != None:
+    #         post = Blog.query.filter_by(id=postID).first()
+    #         return render_template('postdetail.html', title="Blogz", post=post)
+
+    if request.method == 'GET':
         postID = request.args.get('id', default=None)
         if postID != None:
             post = Blog.query.filter_by(id=postID).first()
-            return render_template('postdetail.html', title="Blogz", post=post)
-        else:
-            posts = Blog.query.filter_by().all()
-            return render_template('blog.html', title="Blogz", posts=posts)
+            userID = post.owner_id
+            user = User.query.filter_by(id=userID).first()
+            return render_template('postdetail.html', title="Blogz", post=post, user=user)
+
+        userID = request.args.get('userID', default=None)
+        if userID != None:
+            posts = Blog.query.filter_by(owner_id=userID).all()
+            user = User.query.filter_by(id=userID).first()
+            #username = user.username
+            return render_template('userblog.html', title="Blogz", posts=posts, user=user)
+
+    posts = Blog.query.filter_by().all()
+    #users = User.query.filter_by().all()
+    return render_template('blog.html', title="Blogz", posts=posts)
 
 
 @app.route('/', methods=['POST', 'GET'])

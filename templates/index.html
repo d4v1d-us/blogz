@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<h3>All Blog Post Authors</h3>
+<h3>All Blog Authors</h3>
 
 {% if users|length == 0 %}
 <p>No Users yet</p>
@@ -12,7 +12,10 @@
     {% for user in users %}
     <tr>
         <td>
-            <b><a href='./blog?user={{user.id}}' class="">{{user.username}}</a></b>
+            <br>
+            <b><a href='./blog?userID={{user.id}}' class="">{{user.username}}</a></b>
+            <br><br>
+            
         </td>
     </tr>
     {% endfor %}

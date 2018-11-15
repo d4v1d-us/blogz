@@ -1,13 +1,16 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h3>Blog Post Detail</h3>
+<h3>a Blog post by <a href='./blog?userID={{user.id}}' class="">{{user.username}}</a></h3>
+
 <form >
     <div class="form-group">
         <label for="post" >Title</label>
         <input class="form-control" type="text" readonly="True" name='title' value="{{post.title}}" />
         <label for="body">Body</label>
         <textarea class="form-control" name='body' readonly="True">{{post.body}}</textarea>
+        <br>
+        by: <a href='./blog?userID={{user.id}}' class="">{{user.username}}
     </div>
 </form>
 {% endblock %}
