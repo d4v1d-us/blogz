@@ -27,6 +27,10 @@
         <a href='/blog' class="navbar-brand">Blogz</a>
         {% if 'username' in session %}
         <ul class="nav navbar-nav navbar-right">
+                <li><br>
+                    Logged in as: {{session['username']}} &nbsp;&nbsp;&nbsp;&nbsp;
+                </li>
+
             <li>
                 <form method="get" action="/newpost">
                     <button class="btn btn-default navbar-btn">Add a New Post</button>
@@ -51,7 +55,7 @@
         </ul>
         {% endif %}
 
-        {% if 'username' not in session%}
+        {% if 'username' not in session %}
         <ul class="nav navbar-nav navbar-right">
         <li>
             <form method="get" action="/login">
@@ -66,7 +70,7 @@
     </nav>
     
 
-    <div class="container">
+    <div class="container" >
 
         {% with messages = get_flashed_messages(with_categories=True) %}
         {% for category,message in messages %}

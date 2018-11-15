@@ -53,16 +53,16 @@ def login():
         password = request.form.get('password')
 
         if username == "":
-            flash('Please enter your Username', 'danger')
+            flash('Please enter your Username', 'warning')
             return render_template('login.html', title="Blogz")
 
         if password == "":
-            flash('Please enter your Password', 'danger')
+            flash('Please enter your Password', 'warning')
             return render_template('login.html', title="Blogz")
 
         user = User.query.filter_by(username=username).first()
         if not user:
-            flash('Username does not exist', 'danger')
+            flash('Username does not exist', 'warning')
             return render_template('login.html', title="Blogz")
 
         user = User.query.filter_by(username=username, password=password).first()
@@ -161,7 +161,9 @@ def newpost():
 
         postID = new_post.id
         post = Blog.query.filter_by(id=postID).first()
-        return render_template('postdetail.html', title="Blogz", post=post)
+        userID = post.owner_id
+        user = User.query.filter_by(id=userID).first()
+        return render_template('postdetail.html', title="Blogz", post=post, user=user )
 
         # posts = Blog.query.filter_by().all()
         # return render_template('blog.html', title="Build a Blog", posts=posts)
