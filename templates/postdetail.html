@@ -1,8 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h3>a Blog post by <a href='./blog?userID={{user.id}}' class="">{{user.username}}</a></h3>
-
+<h3>a Blog post by <a href='./blog?userID={{post.owner.id}}' class="">{{post.owner.username}}</a></h3>
 <form >
     <div class="form-group">
         <label for="post" >Title</label>
@@ -10,7 +9,7 @@
         <label for="body">Body</label>
         <textarea class="form-control" name='body' readonly="True">{{post.body}}</textarea>
         <br>
-        by: <a href='./blog?userID={{user.id}}' class="">{{user.username}}
+        by: <a href='./blog?userID={{post.owner.id}}' class="">{{post.owner.username}}
     </div>
 </form>
 {% endblock %}

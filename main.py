@@ -22,7 +22,6 @@ class Blog(db.Model):
         self.owner = owner
         #self.id = id
 
-
 class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
@@ -36,15 +35,11 @@ class User(db.Model):
         #self.pw_hash = make_pw_hash(password)
         #self.id = id
 
-
 @app.before_request
 def require_login():
-
-    #login  list_blogs index signup
     allowed_routes = ['login', 'register', 'blog', 'index', 'static']
     if request.endpoint not in allowed_routes and 'username' not in session:
         return redirect('/login')
-
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -68,7 +63,6 @@ def login():
         user = User.query.filter_by(username=username, password=password).first()
 
         if user:  # and check_pw_hash(password, user.pw_hash):
-            #session['email'] = user.email
             session['username'] = username
             flash("Logged in", 'info')
             return redirect('/newpost')
@@ -79,7 +73,6 @@ def login():
 
 @app.route('/logout', methods=['POST'])
 def logout():
-    #del session['email']
     del session['username']
     return redirect('/blog')
 
@@ -155,75 +148,42 @@ def newpost():
         owner = User.query.filter_by(username=session['username']).first()
 
         new_post = Blog(title, body, owner)
-
         db.session.add(new_post)
         db.session.commit()
-
         postID = new_post.id
         post = Blog.query.filter_by(id=postID).first()
-        userID = post.owner_id
-        user = User.query.filter_by(id=userID).first()
-        return render_template('postdetail.html', title="Blogz", post=post, user=user )
-
-        # posts = Blog.query.filter_by().all()
-        # return render_template('blog.html', title="Build a Blog", posts=posts)
+        
+        return render_template('postdetail.html', title="Blogz", post=post )
 
     if request.method == 'GET':
-
-        #posts = Blog.query.filter_by().all()
         return render_template('newpost.html', title="Blogz")
 
 
 @app.route('/blog', methods=['POST', 'GET'])
 def blog():
 
-    # if request.method == 'POST': #or request.method == 'GET':
-    #     postID = request.args.get('id', default=None)
-    #     if postID != None:
-    #         post = Blog.query.filter_by(id=postID).first()
-    #         return render_template('postdetail.html', title="Blogz", post=post)
-
     if request.method == 'GET':
         postID = request.args.get('id', default=None)
         if postID != None:
             post = Blog.query.filter_by(id=postID).first()
-            userID = post.owner_id
-            user = User.query.filter_by(id=userID).first()
-            return render_template('postdetail.html', title="Blogz", post=post, user=user)
+            return render_template('postdetail.html', title="Blogz", post=post)
 
         userID = request.args.get('userID', default=None)
         if userID != None:
             posts = Blog.query.filter_by(owner_id=userID).all()
             user = User.query.filter_by(id=userID).first()
-            #username = user.username
             return render_template('userblog.html', title="Blogz", posts=posts, user=user)
 
     posts = Blog.query.filter_by().all()
-    #users = User.query.filter_by().all()
     return render_template('blog.html', title="Blogz", posts=posts)
 
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
 
-    # if request.method == 'POST':
-    #     title = request.form['title']
-    #     body = request.form['body']
-
-    #     new_post = Blog(title, body, owner)
-
-    #     db.session.add(new_post)
-    #     db.session.commit()
-
-    #     posts = Blog.query.filter_by().all()
-
-    #     return render_template('index.html', title="Blogz", posts=posts)
-
     if request.method == 'GET':
-
         users = User.query.filter_by().all()
         return render_template('index.html', title="Blogz", users=users)
-
 
 if __name__ == '__main__':
     app.run()

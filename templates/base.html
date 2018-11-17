@@ -17,12 +17,21 @@
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 
+    <style>
+        body {
+            background-image: url("{{ url_for('static', filename = 'css/images/note.jpg') }}");
+        }
+    </style>
+
 </head>
 
 <body>
-      
-    <nav class="navbar navbar-default">
-        <a href='/blog' class="navbar-brand">Blogz</a>
+       
+    <nav class="navbar navbar-inverse ">
+        <a class="navbar-brand " href='/blog'>Blogz</a>
+
+        
+
         {% if 'username' in session %}
         <ul class="nav navbar-nav navbar-right">
                 <li><br>
