@@ -9,7 +9,7 @@
         <label for="body">Body</label>
         <textarea class="form-control" name='body' readonly="True">{{post.body}}</textarea>
         <br>
-        by: <a href='./blog?userID={{post.owner.id}}' class="">{{post.owner.username}}
+        Written by: <a href='./blog?userID={{post.owner.id}}' class="">{{post.owner.username}}</a> Posted: {{post.created_dt}}
     </div>
 </form>
 {% endblock %}

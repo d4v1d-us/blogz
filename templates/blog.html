@@ -13,7 +13,8 @@
         <tr>
             <td>
                 <b><a href='./blog?id={{post.id}}' class="">{{post.title}}</a></b><br>{{post.body}}<br><br>
-                by:<a href='./blog?userID={{post.owner.id}}' class="">{{post.owner.username}}</a>
+                Written by: <a href='./blog?userID={{post.owner.id}}' class="">{{post.owner.username}}</a> Posted: {{post.created_dt}}
+                
             </td>
         </tr>
         {% endfor %}

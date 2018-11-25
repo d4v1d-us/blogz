@@ -1,5 +1,6 @@
 from flask import Flask, request, redirect, render_template, session, flash
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
@@ -15,10 +16,15 @@ class Blog(db.Model):
     title = db.Column(db.String(120))
     body = db.Column(db.String(120))
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    created_dt = db.Column(db.DateTime)
 
-    def __init__(self, title, body, owner):
+
+    def __init__(self, title, body, owner, created_dt=None):
         self.title = title
         self.body = body
+        if created_dt is None:
+            created_dt = datetime.utcnow()
+        self.created_dt = created_dt
         self.owner = owner
         #self.id = id
 
@@ -27,11 +33,15 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     password = db.Column(db.String(10))
     username = db.Column(db.String(10), unique=True)
+    created_dt = db.Column(db.DateTime)
     blogz = db.relationship('Blog', backref='owner')
 
-    def __init__(self, username, password):
+    def __init__(self, username, password, created_dt=None):
         self.username = username
         self.password = password
+        if created_dt is None:
+            created_dt = datetime.utcnow()
+        self.created_dt = created_dt
         #self.pw_hash = make_pw_hash(password)
         #self.id = id
 
@@ -146,6 +156,7 @@ def newpost():
             return render_template('newpost.html', title="Blogz", post_title=title, body=body)
 
         owner = User.query.filter_by(username=session['username']).first()
+        #created_dt = time.time()
 
         new_post = Blog(title, body, owner)
         db.session.add(new_post)
